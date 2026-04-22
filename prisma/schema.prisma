@@ -1,0 +1,105 @@
+// 问卷调查平台数据库模型定义
+// 关系：Survey 1:N Question、Question 1:N Option、Survey 1:N Response、Response 1:N Answer
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// 问卷状态枚举
+enum SurveyStatus {
+  DRAFT       // 草稿
+  PUBLISHED   // 已发布
+  CLOSED      // 已结束
+}
+
+// 题型枚举
+enum QuestionType {
+  SINGLE_CHOICE     // 单选
+  MULTIPLE_CHOICE   // 多选
+  TEXT              // 填空
+}
+
+// 问卷表
+model Survey {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  status      SurveyStatus @default(DRAFT)
+  userId      String       // Clerk userId，不做外键约束
+  viewCount   Int          @default(0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // 关系
+  questions  Question[]  @relation("SurveyQuestions")
+  responses  Response[]  @relation("SurveyResponses")
+
+  @@index([userId])
+  @@index([status])
+}
+
+// 题目表
+model Question {
+  id        String        @id @default(cuid())
+  surveyId  String
+  text      String
+  type      QuestionType
+  order     Int           @default(0)
+  required  Boolean       @default(false)
+  createdAt DateTime      @default(now())
+
+  // 关系
+  survey   Survey    @relation("SurveyQuestions", fields: [surveyId], references: [id], onDelete: Cascade)
+  options  Option[]  @relation("QuestionOptions")
+  answers  Answer[]  @relation("QuestionAnswers")
+
+  @@index([surveyId])
+}
+
+// 选项表（单选/多选用）
+model Option {
+  id         String   @id @default(cuid())
+  questionId String
+  text       String
+  order      Int      @default(0)
+
+  // 关系
+  question Question @relation("QuestionOptions", fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId])
+}
+
+// 答卷表
+model Response {
+  id         String   @id @default(cuid())
+  surveyId   String
+  ipAddress  String?  // 可选，用于基础防刷
+  submittedAt DateTime @default(now())
+
+  // 关系
+  survey  Survey   @relation("SurveyResponses", fields: [surveyId], references: [id], onDelete: Cascade)
+  answers Answer[] @relation("ResponseAnswers")
+
+  @@index([surveyId])
+}
+
+// 答案表
+model Answer {
+  id         String  @id @default(cuid())
+  responseId String
+  questionId String
+  optionId   String? // 单选/多选用
+  textValue  String? // 填空用
+
+  // 关系
+  response Response @relation("ResponseAnswers", fields: [responseId], references: [id], onDelete: Cascade)
+  question Question @relation("QuestionAnswers", fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([responseId])
+  @@index([questionId])
+}

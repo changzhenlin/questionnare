@@ -78,9 +78,12 @@ questionnaire/
 │   │   │       └── page.tsx      # 管理端：数据统计与可视化页
 │   │   └── layout.tsx            # survey 路由组共享布局（如加载状态）
 │   │
-│   └── (auth)/                   # 认证相关路由分组（可选）
-│       ├── sign-in/[[...sign-in]]/page.tsx
-│       └── sign-up/[[...sign-up]]/page.tsx
+│   ├── sign-in/[[...sign-in]]/   # 登录页
+│   │   └── page.tsx
+│   ├── sign-up/[[...sign-up]]/   # 注册页
+│   │   └── page.tsx
+│   └── dashboard/                # 问卷列表页（需登录）
+│       └── page.tsx
 │
 ├── components/
 │   ├── ui/                       # shadcn/ui 基础组件（Button、Input、Card 等）
@@ -110,7 +113,8 @@ questionnaire/
 │   └── utils.ts                  # 通用工具函数（cn、格式化等）
 │
 ├── prisma/
-│   └── schema.prisma             # 数据库模型定义（Survey/Question/Option/Response/Answer）
+│   ├── schema.prisma             # 数据库模型定义（Survey/Question/Option/Response/Answer）
+│   └── config.ts                 # Prisma 配置（数据源、迁移路径）
 │
 ├── public/                       # 静态资源
 │
@@ -122,14 +126,14 @@ questionnaire/
 │   ├── useSurvey.ts              # 单问卷数据获取与 mutations
 │   └── useStats.ts               # 统计数据获取
 │
-├── middleware.ts                 # Next.js 中间件（Clerk 路由保护）
+├── src/middleware.ts             # Next.js 中间件（Clerk 路由保护，必须位于 src/）
 ├── next.config.js                # Next.js 配置
 ├── postcss.config.mjs            # PostCSS 配置（Tailwind v4 插件）
 ├── tsconfig.json                 # TypeScript 配置
 └── package.json
 ```
 
-> **当前状态（步骤 1.1 完成后）**：基础框架已初始化，`app/api/`、`app/dashboard/`、`app/survey/`、`components/`、`lib/`、`prisma/`、`hooks/`、`types/` 等目录尚未创建，将在后续步骤中按需生成。
+> **当前状态（步骤 1.5 完成后）**：基础框架已初始化，shadcn/ui 已集成，Prisma 已配置且数据库模型已同步，Clerk 认证已集成。所有 Phase 1 步骤完成。`app/api/`、`app/survey/[id]/`、`hooks/`、`types/` 等目录将在后续步骤中按需生成。
 
 ---
 
@@ -142,6 +146,8 @@ questionnaire/
 | `eslint.config.mjs` | ESLint 配置，使用 `eslint-config-next` |
 | `tsconfig.json` | TypeScript 配置，包含 `@/*` 路径别名指向 `./src/*` |
 | `pnpm-workspace.yaml` | pnpm workspace 配置（单项目空 workspace） |
+| `prisma.config.ts` | Prisma 配置，定义 schema 路径、数据源 URL、迁移目录 |
+| `.env` | 环境变量（`DATABASE_URL`、`CLERK_SECRET_KEY`、`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` 等），已加入 `.gitignore` |
 
 > **注意**：Tailwind CSS v4 不再使用 `tailwind.config.ts`，主题变量通过 `src/app/globals.css` 中的 `@theme inline` 指令定义。
 
@@ -452,7 +458,7 @@ sequenceDiagram
 | 位置 | 职责 |
 |------|------|
 | `app/layout.tsx` | 包裹 `ClerkProvider`，提供全局认证上下文 |
-| `middleware.ts` | 使用 `clerkMiddleware` 保护 `/dashboard`、`/survey/*/edit`、`/survey/*/results` 等路由，未登录重定向到 `/sign-in` |
+| `src/middleware.ts` | 使用 `clerkMiddleware` 保护 `/dashboard`、`/survey/*/edit`、`/survey/*/results` 等路由，未登录重定向到 `/sign-in` |
 | `app/api/*` | 使用 `auth()` 获取 `userId`，业务表通过 `userId` 关联，不做数据库外键 |
 | `app/survey/[id]/page.tsx` | 公开页面，不调用 `auth()`，允许匿名访问 |
 
