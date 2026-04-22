@@ -1,20 +1,14 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-const isProtectedRoute = createRouteMatcher([
+// 仅保护页面路由，API 路由在 handler 中自行校验 auth()
+const isProtectedPage = createRouteMatcher([
   "/dashboard",
   "/survey/:id/edit",
   "/survey/:id/results",
-  "/api/surveys",
-  "/api/surveys/:id",
-  "/api/surveys/:id/publish",
-  "/api/surveys/:id/close",
-  "/api/surveys/:id/reopen",
-  "/api/surveys/:id/stats",
-  "/api/responses/:id",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) {
+  if (isProtectedPage(req)) {
     await auth.protect();
   }
 });

@@ -107,7 +107,7 @@ questionnaire/
 │
 ├── lib/                          # 工具库与共享逻辑
 │   ├── prisma.ts                 # Prisma Client 单例（全局唯一实例）
-│   ├── validations.ts            # Zod Schema（问卷/题目/选项/答卷校验）
+│   ├── validations.ts            # Zod Schema（问卷/题目/选项/答卷校验，前后端共用）
 │   ├── api.ts                    # 前端 API 调用封装（fetch 包装器）
 │   ├── auth.ts                   # Clerk 认证辅助函数（获取 userId 等）
 │   └── utils.ts                  # 通用工具函数（cn、格式化等）
@@ -133,7 +133,7 @@ questionnaire/
 └── package.json
 ```
 
-> **当前状态（步骤 1.5 完成后）**：基础框架已初始化，shadcn/ui 已集成，Prisma 已配置且数据库模型已同步，Clerk 认证已集成。所有 Phase 1 步骤完成。`app/api/`、`app/survey/[id]/`、`hooks/`、`types/` 等目录将在后续步骤中按需生成。
+> **当前状态（步骤 2.4 完成后）**：基础框架已初始化，shadcn/ui 已集成，Prisma 已配置且数据库模型已同步，Clerk 认证已集成，Zod 校验 Schema 已定义，问卷 CRUD API、状态流转 API 和答卷提交 API 均已实现。`app/survey/[id]/`、`hooks/`、`types/` 等目录将在后续步骤中按需生成。
 
 ---
 
