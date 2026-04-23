@@ -36,6 +36,14 @@ export async function GET(
     }
   }
 
+  // 已发布问卷：增加浏览数（异步，不阻塞返回）
+  if (survey.status === "PUBLISHED") {
+    prisma.survey.update({
+      where: { id },
+      data: { viewCount: { increment: 1 } },
+    }).catch(() => {});
+  }
+
   return NextResponse.json(survey);
 }
 

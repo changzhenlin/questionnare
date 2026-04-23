@@ -1,12 +1,33 @@
-import { auth } from "@clerk/nextjs/server";
+import Link from "next/link";
+import { SignOutButton } from "@clerk/nextjs";
+import { SurveyList } from "@/components/survey/SurveyList";
 
-export default async function DashboardPage() {
-  const { userId } = await auth();
-
+export default function DashboardPage() {
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold">我的问卷</h1>
-      <p className="mt-2 text-zinc-600">用户ID: {userId}</p>
+    <div className="flex min-h-screen flex-col bg-zinc-50">
+      {/* Header */}
+      <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white/80 backdrop-blur-sm">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
+          <Link
+            href="/"
+            className="text-lg font-semibold text-zinc-900 hover:text-zinc-700"
+          >
+            问卷调查平台
+          </Link>
+          <SignOutButton redirectUrl="/">
+            <button className="text-sm font-medium text-zinc-600 hover:text-zinc-900">
+              登出
+            </button>
+          </SignOutButton>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1">
+        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+          <SurveyList />
+        </div>
+      </main>
     </div>
   );
 }
