@@ -358,11 +358,13 @@ export function SurveyEditor({ surveyId }: SurveyEditorProps) {
         >
           <div className="flex items-center gap-3"
           >
-            <Link href="/dashboard">
-              <Button variant="ghost" size="icon-sm">
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-            </Link>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              render={<Link href="/dashboard" />}
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
             <div className="flex items-center gap-2"
             >
               <span className="text-sm font-semibold text-zinc-900"

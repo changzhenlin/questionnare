@@ -1,23 +1,24 @@
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
-import { SignOutButton } from "@clerk/nextjs";
+import { InteractiveParticleBackground } from "@/components/home/InteractiveParticleBackground";
+import { SignOutAction } from "@/components/auth/SignOutAction";
 
 export default async function Home() {
   const { userId } = await auth();
   const isSignedIn = !!userId;
 
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-50">
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-zinc-50">
+      <InteractiveParticleBackground />
+
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4">
+      <header className="relative z-10 flex items-center justify-between px-6 py-4">
         <span className="text-lg font-semibold text-zinc-900">问卷调查平台</span>
         <div className="flex items-center gap-3">
           {isSignedIn ? (
-            <SignOutButton redirectUrl="/">
-              <button className="text-sm font-medium text-zinc-700 hover:text-zinc-900">
-                登出
-              </button>
-            </SignOutButton>
+            <SignOutAction className="text-sm font-medium text-zinc-700 hover:text-zinc-900">
+              登出
+            </SignOutAction>
           ) : (
             <>
               <Link
@@ -38,29 +39,31 @@ export default async function Home() {
       </header>
 
       {/* Hero */}
-      <main className="flex flex-1 flex-col items-center justify-center gap-6 px-4 text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-zinc-900">
-          问卷调查平台
-        </h1>
-        <p className="text-lg text-zinc-600">
-          快速创建问卷、分享链接、收集反馈
-        </p>
-        <div className="flex items-center gap-4">
-          {isSignedIn ? (
-            <Link
-              href="/dashboard"
-              className="rounded-full bg-zinc-900 px-6 py-3 text-white transition hover:bg-zinc-700"
-            >
-              进入工作台
-            </Link>
-          ) : (
-            <Link
-              href="/sign-up"
-              className="rounded-full bg-zinc-900 px-6 py-3 text-white transition hover:bg-zinc-700"
-            >
-              开始使用
-            </Link>
-          )}
+      <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 text-center">
+        <div className="flex max-w-2xl flex-col items-center gap-6">
+          <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl">
+            问卷调查平台
+          </h1>
+          <p className="text-lg text-zinc-600">
+            快速创建问卷、分享链接、收集反馈
+          </p>
+          <div className="flex items-center gap-4">
+            {isSignedIn ? (
+              <Link
+                href="/dashboard"
+                className="rounded-full bg-zinc-900 px-6 py-3 text-white transition hover:bg-zinc-700"
+              >
+                进入工作台
+              </Link>
+            ) : (
+              <Link
+                href="/sign-up"
+                className="rounded-full bg-zinc-900 px-6 py-3 text-white transition hover:bg-zinc-700"
+              >
+                开始使用
+              </Link>
+            )}
+          </div>
         </div>
       </main>
     </div>

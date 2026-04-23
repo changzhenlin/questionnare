@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SignOutButton } from "@clerk/nextjs";
+import { SignOutAction } from "@/components/auth/SignOutAction";
 import { SurveyList } from "@/components/survey/SurveyList";
 
 export default function DashboardPage() {
@@ -14,11 +14,9 @@ export default function DashboardPage() {
           >
             问卷调查平台
           </Link>
-          <SignOutButton redirectUrl="/">
-            <button className="text-sm font-medium text-zinc-600 hover:text-zinc-900">
-              登出
-            </button>
-          </SignOutButton>
+          <SignOutAction className="text-sm font-medium text-zinc-600 hover:text-zinc-900">
+            登出
+          </SignOutAction>
         </div>
       </header>
 

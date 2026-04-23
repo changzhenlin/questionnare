@@ -114,21 +114,25 @@ export function SurveyStats({ surveyId }: SurveyStatsProps) {
       <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white/80 backdrop-blur-sm">
         <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-2 px-4 py-3">
           <div className="flex items-center gap-3">
-            <Link href="/dashboard">
-              <Button variant="ghost" size="icon-sm">
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-            </Link>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              render={<Link href="/dashboard" />}
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
             <span className="text-sm font-semibold text-zinc-900">
               数据统计
             </span>
           </div>
-          <Link href={`/survey/${surveyId}/edit`}>
-            <Button variant="outline" size="sm">
-              <FileText className="mr-1.5 h-3.5 w-3.5" />
-              编辑问卷
-            </Button>
-          </Link>
+          <Button
+            variant="outline"
+            size="sm"
+            render={<Link href={`/survey/${surveyId}/edit`} />}
+          >
+            <FileText className="mr-1.5 h-3.5 w-3.5" />
+            编辑问卷
+          </Button>
         </div>
       </header>
 

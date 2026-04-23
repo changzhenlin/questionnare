@@ -160,11 +160,9 @@ export function SurveyList() {
           我的问卷
         </h1>
         <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
-          <DialogTrigger>
-            <Button className="gap-1.5">
-              <Plus className="h-4 w-4" />
-              新建问卷
-            </Button>
+          <DialogTrigger render={<Button className="gap-1.5" />}>
+            <Plus className="h-4 w-4" />
+            新建问卷
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
             <form onSubmit={handleCreate}>
@@ -294,22 +292,33 @@ export function SurveyList() {
 
                   <div className="flex items-center gap-1">
                     {survey.status === "PUBLISHED" && (
-                      <Link href={`/survey/${survey.id}/results`} title="查看统计">
-                        <Button variant="ghost" size="icon-sm">
-                          <BarChart3 className="h-4 w-4" />
-                        </Button>
-                      </Link>
-                    )}
-                    <Link href={`/survey/${survey.id}/edit`} title="编辑问卷">
-                      <Button variant="ghost" size="icon-sm">
-                        <FileText className="h-4 w-4" />
+                      <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        render={
+                          <Link
+                            href={`/survey/${survey.id}/results`}
+                            title="查看统计"
+                          />
+                        }
+                      >
+                        <BarChart3 className="h-4 w-4" />
                       </Button>
-                    </Link>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      render={
+                        <Link href={`/survey/${survey.id}/edit`} title="编辑问卷" />
+                      }
+                    >
+                      <FileText className="h-4 w-4" />
+                    </Button>
                     <DropdownMenu>
-                      <DropdownMenuTrigger>
-                        <Button variant="ghost" size="icon-sm">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
+                      <DropdownMenuTrigger
+                        render={<Button variant="ghost" size="icon-sm" />}
+                      >
+                        <MoreHorizontal className="h-4 w-4" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         {survey.status === "PUBLISHED" && (
